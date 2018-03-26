@@ -24,7 +24,14 @@ public class ArUtil {
 
     private double mLng,mLat,mAsl;
 
-
+    /**
+     * 计算x相关参数
+     */
+    private double[] temp = new double[2];
+    private int rotCounter = 0;
+    private double ω1,ω2;
+    private double θ;
+    private double β;
 
 
     public  ArUtil(Context context, double mLng, double mLat, double mAsl){
@@ -54,8 +61,35 @@ public class ArUtil {
 
         mAzimuth = azimuth;
 
+        temp[0] = temp[1];
+        temp[1] = mAzimuth;
 
-        return (Math.toDegrees(Math.atan((mLng-usrLng)/(mLat-usrLat)))-mAzimuth)*(screenWidth/α)+screenWidth/2;
+        if(temp[1]-temp[0]>180){
+            rotCounter--;
+        }
+
+        if(temp[1]-temp[0]<-180){
+            rotCounter++;
+        }
+
+        ω1 = azimuth + rotCounter*360;
+
+        ω2 = ω1*0.05+ω2*0.95;
+
+        θ = Math.toDegrees(Math.atan((mLng-usrLng)/(mLat-usrLat)));
+
+        θ = θ + rotCounter*360;
+
+        β = θ - ω2;
+
+        if(β<-180){
+            β = β+360;
+        }
+        if(β>180){
+            β = β-360;
+        }
+
+        return β*(screenWidth/30)+screenWidth/2;
     }
 
     public double calculateY(double pitch){

@@ -52,8 +52,8 @@ public class SensorListener implements SensorEventListener {
         if (magneticSensor == null || accelerometerSensor == null)
             return;
 
-        sensorManager.registerListener(this, magneticSensor, SensorManager.SENSOR_DELAY_UI);
-        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, magneticSensor, SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     public void stop() {
@@ -93,11 +93,11 @@ public class SensorListener implements SensorEventListener {
         temp[1] = azimuth;
 
         if(temp[1]-temp[0]>180){
-            rotCounter++;
+            rotCounter--;
         }
 
         if(temp[1]-temp[0]<-180){
-            rotCounter--;
+            rotCounter++;
         }
 
         w1 = azimuth + rotCounter*360;
