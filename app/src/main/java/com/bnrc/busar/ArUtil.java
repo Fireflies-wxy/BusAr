@@ -22,22 +22,22 @@ public class ArUtil {
     private double usrLng = 116.35878;
     private double usrAsl = 13.66666;
 
-    private double mLng = 116.376364;
-    private double mLat = 39.98143;
-    private double mAsl = 13.66666;
+    private double mLng,mLat,mAsl;
 
 
-    public  ArUtil(Context context, double azimuth, double pitch, double roll){
-        mAzimuth = azimuth;
-        mPitch = pitch;
-        mRoll = roll;
+
+
+    public  ArUtil(Context context, double mLng, double mLat, double mAsl){
+//        mAzimuth = azimuth;
+//        mPitch = pitch;
+//        mRoll = roll;
+        this.mLng = mLng;
+        this.mLat = mLat;
+        this.mAsl = mAsl;
 
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        screenWidth = dm.widthPixels;
-        screenHeight = dm.heightPixels;
-
-        Log.d(TAG,"screenWidth: "+screenWidth);
-        Log.d(TAG,"screenHeight: "+screenHeight);
+        screenWidth = dm.widthPixels;   //width:1080
+        screenHeight = dm.heightPixels; //height:1920
     }
 
     public double getDistance(double lat1, double lon1, double lat2, double lon2){
@@ -51,7 +51,9 @@ public class ArUtil {
     }
 
     public double calculateX(double azimuth){
+
         mAzimuth = azimuth;
+
 
         return (Math.toDegrees(Math.atan((mLng-usrLng)/(mLat-usrLat)))-mAzimuth)*(screenWidth/α)+screenWidth/2;
     }

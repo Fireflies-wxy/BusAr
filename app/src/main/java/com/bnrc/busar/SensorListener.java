@@ -19,7 +19,12 @@ public class SensorListener implements SensorEventListener {
     private Sensor magneticSensor, accelerometerSensor;
     private float[] values, r, gravity, geomagnetic;
 
+    private double[] temp = new double[2];
+    private int rotCounter = 0;
+
     private ISensorListener sensorListener;
+
+    private double w1,w2;
 
     public SensorListener(Context context){
         this.context = context;
@@ -82,8 +87,29 @@ public class SensorListener implements SensorEventListener {
         if (azimuth<0) {
             azimuth=azimuth+360;
         }
+
+
+        temp[0] = temp[1];
+        temp[1] = azimuth;
+
+        if(temp[1]-temp[0]>180){
+            rotCounter++;
+        }
+
+        if(temp[1]-temp[0]<-180){
+            rotCounter--;
+        }
+
+        w1 = azimuth + rotCounter*360;
+
+        w2 = w1*0.05+w2*0.95;
+
+        azimuth = w2;
+
         double pitch = Math.toDegrees(values[1]);
         double roll = Math.toDegrees(values[2]);
+
+        pitch = Math.toDegrees(values[1])*0.05+pitch*0.95;
 
         if (sensorListener != null)
             sensorListener.onGyroScopeChange(azimuth,pitch,roll);

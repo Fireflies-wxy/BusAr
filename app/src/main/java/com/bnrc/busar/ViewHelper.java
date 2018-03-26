@@ -47,9 +47,11 @@ public class ViewHelper implements SensorListener.ISensorListener{
 
     @Override
     public void onGyroScopeChange(double azimuth, double pitch, double roll) {
+
         mTextView.setText("Azimuth：" + (int)azimuth + "\nPitch：" + (int)pitch + "\nRoll：" + (int)roll  + "\nX: "+arUtil.calculateX(azimuth) + "\nY: "+arUtil.calculateY(pitch));
-        mTag.setX((float) arUtil.calculateX(azimuth));
-        mTag.setY((float) arUtil.calculateY(pitch));
+//        mTag.setX((float) arUtil.calculateX(azimuth));
+        mTag.setX((float)azimuth);
+ 
 
 
     }
