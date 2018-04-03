@@ -37,6 +37,7 @@ public class SensorListener implements SensorEventListener {
         magneticSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+
         values = new float[3];//用来保存最终的结果
         gravity = new float[3];//用来保存加速度传感器的值
         r = new float[9];//
@@ -88,28 +89,8 @@ public class SensorListener implements SensorEventListener {
             azimuth=azimuth+360;
         }
 
-
-        temp[0] = temp[1];
-        temp[1] = azimuth;
-
-        if(temp[1]-temp[0]>180){
-            rotCounter--;
-        }
-
-        if(temp[1]-temp[0]<-180){
-            rotCounter++;
-        }
-
-        w1 = azimuth + rotCounter*360;
-
-        w2 = w1*0.05+w2*0.95;
-
-        azimuth = w2;
-
         double pitch = Math.toDegrees(values[1]);
         double roll = Math.toDegrees(values[2]);
-
-        pitch = Math.toDegrees(values[1])*0.05+pitch*0.95;
 
         if (sensorListener != null)
             sensorListener.onGyroScopeChange(azimuth,pitch,roll);

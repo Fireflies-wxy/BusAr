@@ -10,8 +10,8 @@ public class DbUtil {
     double asl; //海拔 altitude
 
     public DbUtil(){
-        lng = 116.376364;
-        lat = 39.98143;
-        asl = 13.66666;
+        lng = 116.362017;
+        lat = 39.970278;
+        asl = 50.0;
     }
 }

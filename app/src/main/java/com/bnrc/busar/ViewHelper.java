@@ -19,6 +19,8 @@ public class ViewHelper implements SensorListener.ISensorListener{
     private DbUtil dbUtil;
     private ArUtil arUtil;
 
+    private double userLng,userLat,userAsl;
+
 
     public ViewHelper(Context context,View tag, TextView textView){
         mSensorListener = new SensorListener(context);
@@ -28,6 +30,11 @@ public class ViewHelper implements SensorListener.ISensorListener{
         arUtil = new ArUtil(context,dbUtil.lng,dbUtil.lat,dbUtil.asl);
         mTextView = textView;
         mTag = tag;
+
+        //以下部分为测试代码
+//        userLng = (double) userLocation.get(0);
+//        userLat = (double) userLocation.get(1);
+//        userAsl = (double) userLocation.get(2);
     }
 
     /**
@@ -47,8 +54,10 @@ public class ViewHelper implements SensorListener.ISensorListener{
 
     @Override
     public void onGyroScopeChange(double azimuth, double pitch, double roll) {
-
-        mTextView.setText("Azimuth：" + (int)azimuth + "\nPitch：" + (int)pitch + "\nRoll：" + (int)roll  + "\nX: "+arUtil.calculateX(azimuth) + "\nY: "+arUtil.calculateY(pitch));
+        StringBuilder str = new StringBuilder("Azimuth：" + (int)azimuth + "\nPitch：" + (int)pitch + "\nRoll：" + (int)roll);
+        str.append("\nX: "+arUtil.calculateX(azimuth) + "\nY: "+arUtil.calculateY(pitch));
+//        str.append("\nUserLng: "+userLng+"\nUserLat: "+userLat+"\nUserAsl: "+userAsl);
+        mTextView.setText(str);
         mTag.setX((float) arUtil.calculateX(azimuth));
 //        mTag.setX((float)azimuth);
         mTag.setY((float) arUtil.calculateY(pitch));

@@ -15,7 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArActivity extends AppCompatActivity implements SurfaceHolder.Callback{
     private static final String TAG = "ArActivity";
@@ -25,8 +32,12 @@ public class ArActivity extends AppCompatActivity implements SurfaceHolder.Callb
     private SurfaceHolder sh;
     private ImageView tag;
     private TextView textView;
+    private List userLocation= new ArrayList();
+    private LocationClient mLocationClient;
 
     ViewHelper viewHelper;
+
+    private double userLng,userLat,userAsl;
 
 
     @Override
@@ -34,6 +45,12 @@ public class ArActivity extends AppCompatActivity implements SurfaceHolder.Callb
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_ar);
+
+
+//        mLocationClient = new LocationClient(getApplicationContext());
+//        mLocationClient.registerLocationListener(this);
+//        initLocation();
+//        mLocationClient.start();
 
         sv = findViewById(R.id.sv);
         // 初始化SurfaceHolder
@@ -46,6 +63,18 @@ public class ArActivity extends AppCompatActivity implements SurfaceHolder.Callb
         viewHelper = new ViewHelper(this,tag,textView);
 
     }
+
+//    public void initLocation(){
+//        LocationClientOption option = new LocationClientOption();
+//        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+//        option.setCoorType("bd0911");
+//        option.setScanSpan(1000);
+//        option.setOpenGps(true);
+//        option.setLocationNotify(true);
+//        option.setIgnoreKillProcess(false);
+//        mLocationClient.setLocOption(option);
+//    }
+
     @Override
     protected void onResume() {
         // TODO Auto-generated method stub
@@ -72,9 +101,7 @@ public class ArActivity extends AppCompatActivity implements SurfaceHolder.Callb
         viewHelper.stop();
     }
 
-
-
-        /**
+    /**
          * 获取系统相机
          *
          * @return
@@ -144,4 +171,11 @@ public class ArActivity extends AppCompatActivity implements SurfaceHolder.Callb
         // 释放
         clearCamera();
     }
+
+//    @Override
+//    public void onReceiveLocation(BDLocation bdLocation) {
+//        userLocation.set(0,bdLocation.getLongitude());
+//        userLocation.set(1,bdLocation.getLatitude());
+//        userLocation.set(2,bdLocation.getAltitude());
+//    }
 }

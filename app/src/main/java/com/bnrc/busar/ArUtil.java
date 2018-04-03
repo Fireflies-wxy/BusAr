@@ -7,22 +7,30 @@ import android.util.EventLogTags;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+
+import java.util.List;
+
 /**
  * Created by apple on 2018/3/19.
  */
 
-public class ArUtil {
+public class ArUtil{
     private static final String TAG = "ArUtil";
 
     private int screenWidth, screenHeight;
-    private double mAzimuth, mPitch, mRoll;
+    private int mAzimuth, mPitch, mRoll;
     private double α = 30;
     private double φ = 50;
-    private double usrLat = 39.964173;
-    private double usrLng = 116.35878;
-    private double usrAsl = 13.66666;
+    private double γ; //左右倾斜角
+    private double ψ; //前后俯仰角
 
     private double mLng,mLat,mAsl;
+    private double userLng=116.362594;
+    private double userLat=39.969452;
+    private double userAsl=1.0;
 
     /**
      * 计算x相关参数
@@ -33,6 +41,12 @@ public class ArUtil {
     private double θ;
     private double β;
 
+    /**
+     * 计算y相关参数
+     */
+    private double λ;
+    private double δ;
+
 
     public  ArUtil(Context context, double mLng, double mLat, double mAsl){
 //        mAzimuth = azimuth;
@@ -41,6 +55,10 @@ public class ArUtil {
         this.mLng = mLng;
         this.mLat = mLat;
         this.mAsl = mAsl;
+
+//        userLng = (double) userLocation.get(0);
+//        userLat = (double) userLocation.get(1);
+//        userAsl = (double) userLocation.get(2);
 
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         screenWidth = dm.widthPixels;   //width:1080
@@ -58,8 +76,10 @@ public class ArUtil {
     }
 
     public double calculateX(double azimuth){
+        
+        double result = 0;
 
-        mAzimuth = azimuth;
+        mAzimuth = (int) azimuth;
 
         temp[0] = temp[1];
         temp[1] = mAzimuth;
@@ -76,7 +96,7 @@ public class ArUtil {
 
         ω2 = ω1*0.05+ω2*0.95;
 
-        θ = Math.toDegrees(Math.atan((mLng-usrLng)/(mLat-usrLat)));
+        θ = Math.toDegrees(Math.atan((mLng-userLng)/(mLat-userLat)));
 
         θ = θ + rotCounter*360;
 
@@ -88,14 +108,21 @@ public class ArUtil {
         if(β>180){
             β = β-360;
         }
+        //return Math.tan(β)*((screenWidth/2)/Math.tan(α/2))+screenWidth/2;
+        return β*(screenWidth/α)+screenWidth/2;
 
-        return β*(screenWidth/30)+screenWidth/2;
     }
 
     public double calculateY(double pitch){
-        mPitch = pitch;
-        return (-Math.toDegrees(Math.asin((mAsl-usrAsl)/this.getDistance(mLat,mLng,usrLat,usrLng)))-mPitch)*(screenHeight/φ)+screenHeight/2;
 
+        mPitch = (int) ((pitch+90)*0.05+mPitch*0.95);
+
+        λ = Math.asin((mAsl-userAsl)/this.getDistance(mLat,mLng,userLat,userLng));
+
+        δ = -mPitch - λ;
+
+        //return Math.tan(δ)*((screenHeight/2)/Math.tan(φ/2)) + screenHeight/2;
+        return δ*(screenHeight/φ) + screenHeight/2;
     }
 
 }
