@@ -53,14 +53,20 @@ public class ViewHelper implements SensorListener.ISensorListener{
 
 
     @Override
-    public void onGyroScopeChange(double azimuth, double pitch, double roll) {
-        StringBuilder str = new StringBuilder("Azimuth：" + (int)azimuth + "\nPitch：" + (int)pitch + "\nRoll：" + (int)roll);
-        str.append("\nX: "+arUtil.calculateX(azimuth) + "\nY: "+arUtil.calculateY(pitch));
+    public void onGyroScopeChange(double ω, double γ, double ψ) {
+        arUtil.calculate(ω,γ,ψ);
+        StringBuilder str = new StringBuilder("方向角：" + (int)ω+ "\n倾斜角：" + (int)γ + "\n俯仰角：" + (int)ψ);
+        str.append("\nX: "+arUtil.getX() + "\nY: "+arUtil.getY());
 //        str.append("\nUserLng: "+userLng+"\nUserLat: "+userLat+"\nUserAsl: "+userAsl);
+//        str.append("\nVx: "+Vx+"\nVy: "+Vy+"\nVz: "+Vz);
+
+
+
+//        str.append("\nTest γ: "+ γ2 +"\nTest ψ: "+ψ1) ;
         mTextView.setText(str);
-        mTag.setX((float) arUtil.calculateX(azimuth));
+        mTag.setX((float) arUtil.getX());
 //        mTag.setX((float)azimuth);
-        mTag.setY((float) arUtil.calculateY(pitch));
+        mTag.setY((float) arUtil.getY());
 
 
     }
